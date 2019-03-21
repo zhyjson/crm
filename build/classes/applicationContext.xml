@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+							<!-- Service层配置文件 -->
+	<!-- 扫描service层 -->
+	<context:component-scan base-package="com.yidu.service" />
+	
+							<!-- Dao层配置文件 -->	
+	<!-- 导入数据库配置文件 -->
+	<context:property-placeholder location="classpath:mysql.properties"/>
+	<!-- 配置数据源 -->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	<!-- 激活mybatis工厂 -->
+	<bean name="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+	</bean>
+	<!-- 扫描mapper类与xml文件 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.yidu.mapper" />
+	</bean>
+	
+							<!-- 事务配置文件 -->
+	<!-- 配置事务管理器 -->
+	<bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 配置事务通知 -->
+	<tx:advice id="serviceAdvice"  transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+			<tx:method name="delete*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+			<tx:method name="update*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+			<tx:method name="select*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="true"/>
+			<tx:method name="count*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	<!-- 配置切入点并将通知织入到目标对象 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.yidu.service.impl.*serviceImpl.*(..))" id="servicePointcut"/>
+		<aop:advisor advice-ref="serviceAdvice" pointcut-ref="servicePointcut" />
+	</aop:config>
+</beans>

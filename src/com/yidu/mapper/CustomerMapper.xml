@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yidu.mapper.CustomerMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yidu.pojo.Customer" >
+        <id column="cust_id" property="custId" jdbcType="INTEGER" />
+        <result column="cust_name" property="custName" jdbcType="VARCHAR" />
+        <result column="cust_user_id" property="custUserId" jdbcType="INTEGER" />
+        <result column="cust_create_id" property="custCreateId" jdbcType="INTEGER" />
+        <result column="cust_source" property="custSource" jdbcType="INTEGER" />
+        <result column="cust_industry" property="custIndustry" jdbcType="INTEGER" />
+        <result column="cust_level" property="custLevel" jdbcType="INTEGER" />
+        <result column="cust_linkman" property="custLinkman" jdbcType="VARCHAR" />
+        <result column="cust_phone" property="custPhone" jdbcType="VARCHAR" />
+        <result column="cust_mobile" property="custMobile" jdbcType="VARCHAR" />
+        <result column="cust_zipcode" property="custZipcode" jdbcType="VARCHAR" />
+        <result column="cust_address" property="custAddress" jdbcType="VARCHAR" />
+        <result column="cust_createtime" property="custCreatetime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        cust_id, cust_name, cust_user_id, cust_create_id, cust_source, cust_industry, cust_level, 
+        cust_linkman, cust_phone, cust_mobile, cust_zipcode, cust_address, cust_createtime
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yidu.pojo.CustomerExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from customer
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null" >
+            <if test="offset != null" >
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null" >
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from customer
+        where cust_id = #{custId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from customer
+        where cust_id = #{custId,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.yidu.pojo.CustomerExample" >
+        delete from customer
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.yidu.pojo.Customer" >
+        insert into customer (cust_id, cust_name, cust_user_id, 
+            cust_create_id, cust_source, cust_industry, 
+            cust_level, cust_linkman, cust_phone, 
+            cust_mobile, cust_zipcode, cust_address, 
+            cust_createtime)
+        values (#{custId,jdbcType=INTEGER}, #{custName,jdbcType=VARCHAR}, #{custUserId,jdbcType=INTEGER}, 
+            #{custCreateId,jdbcType=INTEGER}, #{custSource,jdbcType=INTEGER}, #{custIndustry,jdbcType=INTEGER}, 
+            #{custLevel,jdbcType=INTEGER}, #{custLinkman,jdbcType=VARCHAR}, #{custPhone,jdbcType=VARCHAR}, 
+            #{custMobile,jdbcType=VARCHAR}, #{custZipcode,jdbcType=VARCHAR}, #{custAddress,jdbcType=VARCHAR}, 
+            #{custCreatetime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.yidu.pojo.Customer" >
+        insert into customer
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="custId != null" >
+                cust_id,
+            </if>
+            <if test="custName != null" >
+                cust_name,
+            </if>
+            <if test="custUserId != null" >
+                cust_user_id,
+            </if>
+            <if test="custCreateId != null" >
+                cust_create_id,
+            </if>
+            <if test="custSource != null" >
+                cust_source,
+            </if>
+            <if test="custIndustry != null" >
+                cust_industry,
+            </if>
+            <if test="custLevel != null" >
+                cust_level,
+            </if>
+            <if test="custLinkman != null" >
+                cust_linkman,
+            </if>
+            <if test="custPhone != null" >
+                cust_phone,
+            </if>
+            <if test="custMobile != null" >
+                cust_mobile,
+            </if>
+            <if test="custZipcode != null" >
+                cust_zipcode,
+            </if>
+            <if test="custAddress != null" >
+                cust_address,
+            </if>
+            <if test="custCreatetime != null" >
+                cust_createtime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="custId != null" >
+                #{custId,jdbcType=INTEGER},
+            </if>
+            <if test="custName != null" >
+                #{custName,jdbcType=VARCHAR},
+            </if>
+            <if test="custUserId != null" >
+                #{custUserId,jdbcType=INTEGER},
+            </if>
+            <if test="custCreateId != null" >
+                #{custCreateId,jdbcType=INTEGER},
+            </if>
+            <if test="custSource != null" >
+                #{custSource,jdbcType=INTEGER},
+            </if>
+            <if test="custIndustry != null" >
+                #{custIndustry,jdbcType=INTEGER},
+            </if>
+            <if test="custLevel != null" >
+                #{custLevel,jdbcType=INTEGER},
+            </if>
+            <if test="custLinkman != null" >
+                #{custLinkman,jdbcType=VARCHAR},
+            </if>
+            <if test="custPhone != null" >
+                #{custPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="custMobile != null" >
+                #{custMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="custZipcode != null" >
+                #{custZipcode,jdbcType=VARCHAR},
+            </if>
+            <if test="custAddress != null" >
+                #{custAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="custCreatetime != null" >
+                #{custCreatetime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.yidu.pojo.CustomerExample" resultType="java.lang.Integer" >
+        select count(*) from customer
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update customer
+        <set >
+            <if test="record.custId != null" >
+                cust_id = #{record.custId,jdbcType=INTEGER},
+            </if>
+            <if test="record.custName != null" >
+                cust_name = #{record.custName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.custUserId != null" >
+                cust_user_id = #{record.custUserId,jdbcType=INTEGER},
+            </if>
+            <if test="record.custCreateId != null" >
+                cust_create_id = #{record.custCreateId,jdbcType=INTEGER},
+            </if>
+            <if test="record.custSource != null" >
+                cust_source = #{record.custSource,jdbcType=INTEGER},
+            </if>
+            <if test="record.custIndustry != null" >
+                cust_industry = #{record.custIndustry,jdbcType=INTEGER},
+            </if>
+            <if test="record.custLevel != null" >
+                cust_level = #{record.custLevel,jdbcType=INTEGER},
+            </if>
+            <if test="record.custLinkman != null" >
+                cust_linkman = #{record.custLinkman,jdbcType=VARCHAR},
+            </if>
+            <if test="record.custPhone != null" >
+                cust_phone = #{record.custPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.custMobile != null" >
+                cust_mobile = #{record.custMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="record.custZipcode != null" >
+                cust_zipcode = #{record.custZipcode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.custAddress != null" >
+                cust_address = #{record.custAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="record.custCreatetime != null" >
+                cust_createtime = #{record.custCreatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update customer
+        set cust_id = #{record.custId,jdbcType=INTEGER},
+            cust_name = #{record.custName,jdbcType=VARCHAR},
+            cust_user_id = #{record.custUserId,jdbcType=INTEGER},
+            cust_create_id = #{record.custCreateId,jdbcType=INTEGER},
+            cust_source = #{record.custSource,jdbcType=INTEGER},
+            cust_industry = #{record.custIndustry,jdbcType=INTEGER},
+            cust_level = #{record.custLevel,jdbcType=INTEGER},
+            cust_linkman = #{record.custLinkman,jdbcType=VARCHAR},
+            cust_phone = #{record.custPhone,jdbcType=VARCHAR},
+            cust_mobile = #{record.custMobile,jdbcType=VARCHAR},
+            cust_zipcode = #{record.custZipcode,jdbcType=VARCHAR},
+            cust_address = #{record.custAddress,jdbcType=VARCHAR},
+            cust_createtime = #{record.custCreatetime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.yidu.pojo.Customer" >
+        update customer
+        <set >
+            <if test="custName != null" >
+                cust_name = #{custName,jdbcType=VARCHAR},
+            </if>
+            <if test="custUserId != null" >
+                cust_user_id = #{custUserId,jdbcType=INTEGER},
+            </if>
+            <if test="custCreateId != null" >
+                cust_create_id = #{custCreateId,jdbcType=INTEGER},
+            </if>
+            <if test="custSource != null" >
+                cust_source = #{custSource,jdbcType=INTEGER},
+            </if>
+            <if test="custIndustry != null" >
+                cust_industry = #{custIndustry,jdbcType=INTEGER},
+            </if>
+            <if test="custLevel != null" >
+                cust_level = #{custLevel,jdbcType=INTEGER},
+            </if>
+            <if test="custLinkman != null" >
+                cust_linkman = #{custLinkman,jdbcType=VARCHAR},
+            </if>
+            <if test="custPhone != null" >
+                cust_phone = #{custPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="custMobile != null" >
+                cust_mobile = #{custMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="custZipcode != null" >
+                cust_zipcode = #{custZipcode,jdbcType=VARCHAR},
+            </if>
+            <if test="custAddress != null" >
+                cust_address = #{custAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="custCreatetime != null" >
+                cust_createtime = #{custCreatetime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where cust_id = #{custId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.yidu.pojo.Customer" >
+        update customer
+        set cust_name = #{custName,jdbcType=VARCHAR},
+            cust_user_id = #{custUserId,jdbcType=INTEGER},
+            cust_create_id = #{custCreateId,jdbcType=INTEGER},
+            cust_source = #{custSource,jdbcType=INTEGER},
+            cust_industry = #{custIndustry,jdbcType=INTEGER},
+            cust_level = #{custLevel,jdbcType=INTEGER},
+            cust_linkman = #{custLinkman,jdbcType=VARCHAR},
+            cust_phone = #{custPhone,jdbcType=VARCHAR},
+            cust_mobile = #{custMobile,jdbcType=VARCHAR},
+            cust_zipcode = #{custZipcode,jdbcType=VARCHAR},
+            cust_address = #{custAddress,jdbcType=VARCHAR},
+            cust_createtime = #{custCreatetime,jdbcType=TIMESTAMP}
+        where cust_id = #{custId,jdbcType=INTEGER}
+    </update>
+</mapper>

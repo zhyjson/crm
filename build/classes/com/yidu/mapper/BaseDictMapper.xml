@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yidu.mapper.BaseDictMapper" >
+
+    <resultMap id="BaseResultMap" type="com.yidu.pojo.BaseDict" >
+        <id column="dict_id" property="dictId" jdbcType="VARCHAR" />
+        <result column="dict_type_code" property="dictTypeCode" jdbcType="VARCHAR" />
+        <result column="dict_type_name" property="dictTypeName" jdbcType="VARCHAR" />
+        <result column="dict_item_name" property="dictItemName" jdbcType="VARCHAR" />
+        <result column="dict_item_code" property="dictItemCode" jdbcType="VARCHAR" />
+        <result column="dict_sort" property="dictSort" jdbcType="INTEGER" />
+        <result column="dict_enable" property="dictEnable" jdbcType="CHAR" />
+        <result column="dict_memo" property="dictMemo" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        dict_id, dict_type_code, dict_type_name, dict_item_name, dict_item_code, dict_sort, 
+        dict_enable, dict_memo
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yidu.pojo.BaseDictExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from base_dict
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null" >
+            <if test="offset != null" >
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null" >
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select 
+        <include refid="Base_Column_List" />
+        from base_dict
+        where dict_id = #{dictId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from base_dict
+        where dict_id = #{dictId,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.yidu.pojo.BaseDictExample" >
+        delete from base_dict
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.yidu.pojo.BaseDict" >
+        insert into base_dict (dict_id, dict_type_code, dict_type_name, 
+            dict_item_name, dict_item_code, dict_sort, 
+            dict_enable, dict_memo)
+        values (#{dictId,jdbcType=VARCHAR}, #{dictTypeCode,jdbcType=VARCHAR}, #{dictTypeName,jdbcType=VARCHAR}, 
+            #{dictItemName,jdbcType=VARCHAR}, #{dictItemCode,jdbcType=VARCHAR}, #{dictSort,jdbcType=INTEGER}, 
+            #{dictEnable,jdbcType=CHAR}, #{dictMemo,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.yidu.pojo.BaseDict" >
+        insert into base_dict
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="dictId != null" >
+                dict_id,
+            </if>
+            <if test="dictTypeCode != null" >
+                dict_type_code,
+            </if>
+            <if test="dictTypeName != null" >
+                dict_type_name,
+            </if>
+            <if test="dictItemName != null" >
+                dict_item_name,
+            </if>
+            <if test="dictItemCode != null" >
+                dict_item_code,
+            </if>
+            <if test="dictSort != null" >
+                dict_sort,
+            </if>
+            <if test="dictEnable != null" >
+                dict_enable,
+            </if>
+            <if test="dictMemo != null" >
+                dict_memo,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="dictId != null" >
+                #{dictId,jdbcType=VARCHAR},
+            </if>
+            <if test="dictTypeCode != null" >
+                #{dictTypeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="dictTypeName != null" >
+                #{dictTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="dictItemName != null" >
+                #{dictItemName,jdbcType=VARCHAR},
+            </if>
+            <if test="dictItemCode != null" >
+                #{dictItemCode,jdbcType=VARCHAR},
+            </if>
+            <if test="dictSort != null" >
+                #{dictSort,jdbcType=INTEGER},
+            </if>
+            <if test="dictEnable != null" >
+                #{dictEnable,jdbcType=CHAR},
+            </if>
+            <if test="dictMemo != null" >
+                #{dictMemo,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.yidu.pojo.BaseDictExample" resultType="java.lang.Integer" >
+        select count(*) from base_dict
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update base_dict
+        <set >
+            <if test="record.dictId != null" >
+                dict_id = #{record.dictId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dictTypeCode != null" >
+                dict_type_code = #{record.dictTypeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dictTypeName != null" >
+                dict_type_name = #{record.dictTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dictItemName != null" >
+                dict_item_name = #{record.dictItemName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dictItemCode != null" >
+                dict_item_code = #{record.dictItemCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dictSort != null" >
+                dict_sort = #{record.dictSort,jdbcType=INTEGER},
+            </if>
+            <if test="record.dictEnable != null" >
+                dict_enable = #{record.dictEnable,jdbcType=CHAR},
+            </if>
+            <if test="record.dictMemo != null" >
+                dict_memo = #{record.dictMemo,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update base_dict
+        set dict_id = #{record.dictId,jdbcType=VARCHAR},
+            dict_type_code = #{record.dictTypeCode,jdbcType=VARCHAR},
+            dict_type_name = #{record.dictTypeName,jdbcType=VARCHAR},
+            dict_item_name = #{record.dictItemName,jdbcType=VARCHAR},
+            dict_item_code = #{record.dictItemCode,jdbcType=VARCHAR},
+            dict_sort = #{record.dictSort,jdbcType=INTEGER},
+            dict_enable = #{record.dictEnable,jdbcType=CHAR},
+            dict_memo = #{record.dictMemo,jdbcType=VARCHAR}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.yidu.pojo.BaseDict" >
+        update base_dict
+        <set >
+            <if test="dictTypeCode != null" >
+                dict_type_code = #{dictTypeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="dictTypeName != null" >
+                dict_type_name = #{dictTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="dictItemName != null" >
+                dict_item_name = #{dictItemName,jdbcType=VARCHAR},
+            </if>
+            <if test="dictItemCode != null" >
+                dict_item_code = #{dictItemCode,jdbcType=VARCHAR},
+            </if>
+            <if test="dictSort != null" >
+                dict_sort = #{dictSort,jdbcType=INTEGER},
+            </if>
+            <if test="dictEnable != null" >
+                dict_enable = #{dictEnable,jdbcType=CHAR},
+            </if>
+            <if test="dictMemo != null" >
+                dict_memo = #{dictMemo,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where dict_id = #{dictId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.yidu.pojo.BaseDict" >
+        update base_dict
+        set dict_type_code = #{dictTypeCode,jdbcType=VARCHAR},
+            dict_type_name = #{dictTypeName,jdbcType=VARCHAR},
+            dict_item_name = #{dictItemName,jdbcType=VARCHAR},
+            dict_item_code = #{dictItemCode,jdbcType=VARCHAR},
+            dict_sort = #{dictSort,jdbcType=INTEGER},
+            dict_enable = #{dictEnable,jdbcType=CHAR},
+            dict_memo = #{dictMemo,jdbcType=VARCHAR}
+        where dict_id = #{dictId,jdbcType=VARCHAR}
+    </update>
+</mapper>
